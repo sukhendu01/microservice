@@ -1,0 +1,37 @@
+kind: Service
+apiVersion: v1
+metadata:
+  name: GreetingsService
+  labels:
+    app: GreetingsService
+spec:
+  type: ClusterIP
+  selector:
+    app: GreetingsService
+  ports:
+    - name: tcp
+      port: 8080
+      protocol: TCP
+      targetPort: 8080
+---
+kind: Deployment
+apiVersion: apps/v1
+metadata:
+  name: GreetingsService
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: GreetingsService
+  template:
+    metadata:
+      labels:
+        app: GreetingsService
+        version: v1
+    spec:
+      containers:
+      - name: GreetingsService
+        image: GreetingsService
+        imagePullPolicy: IfNotPresent
+        ports:
+        - containerPort: 8080
